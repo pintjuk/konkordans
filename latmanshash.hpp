@@ -10,7 +10,7 @@ int latman(string i){
 
 		if(identifier[i]=='\0'){
 			return hash;
-		}//
+		}
 		switch (identifier[i]){
 			case (char)0xf6: /* ö */
 				hash += 29 * mult;

@@ -16,7 +16,13 @@ void openfstream(fstream& filestream, ios_base::openmode flags, string name){
 	}
 }
 
-int main(void) {
+int main(int argc, char ** argv) {
+
+	if (argc == 2) {
+		cout << latman(string(argv[1])) << endl;
+		exit(0);
+	}
+
 	pindex pindex;
 	fstream level3_i_f;
 	fstream level2_i_f;
@@ -27,7 +33,6 @@ int main(void) {
 	openfstream(level2_i_f, fstream::out| fstream::app, "level2");
 	openfstream(level1_i_f, fstream::out, "level1");
 	//fseek(file, 10000, SEEK_SET);
-	cout << latman ("aldring") <<endl;
 	while(cin){
 		char word[45];
 		uint32_t pointer;
@@ -42,7 +47,7 @@ int main(void) {
 		//cout << i.first << endl;
 		for(uint32_t n : i.second)
 			level3_i_f << n << endl;
-		level3_i_f << endl;
+		level3_i_f << (unsigned int)-1 << endl;
 		
 	}
 	
