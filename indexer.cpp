@@ -22,7 +22,6 @@ int main(void) {
 	FILE * file = openIndex("index");
 	//fseek(file, 10000, SEEK_SET);
 	
-
 	while(cin){
 		char word[45];
 		uint32_t pointer;
@@ -30,6 +29,14 @@ int main(void) {
 		cin >> pointer;
 		cin.get();
 		pindex[word].push_back(pointer);
+	}
+
+	for (auto i : pindex) {
+		cout << "Word: " << i.first << endl;
+		for(uint32_t n : i.second) {
+			cout << "   " << n << endl;
+		}
+		
 	}
 
 	cout << "Size: " << pindex.size() << "\n";
