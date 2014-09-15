@@ -5,4 +5,5 @@ indexer: indexer.o
 indexer.o: indexer.cpp latmanshash.hpp
 	g++ $(flags) -c indexer.cpp
 clean:
-	rm *.o indexer 
+	rm *.o indexer level1 level2 level3
+

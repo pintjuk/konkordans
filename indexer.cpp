@@ -21,14 +21,13 @@ int main(void) {
 	fstream level3_i_f;
 	fstream level2_i_f;
 	fstream level1_i_f;
-
 	map<string, uint32_t> level3_positions;
-	map<string, uint32_t> level2_positions;
+	unordered_map<int, uint32_t> level2_positions;
 	openfstream(level3_i_f, fstream::out| fstream::app, "level3");
 	openfstream(level2_i_f, fstream::out| fstream::app, "level2");
-	openfstream(level1_i_f, fstream::out| fstream::app, "level1");
+	openfstream(level1_i_f, fstream::out, "level1");
 	//fseek(file, 10000, SEEK_SET);
-	
+	cout << latman ("aldring") <<endl;
 	while(cin){
 		char word[45];
 		uint32_t pointer;
@@ -41,15 +40,25 @@ int main(void) {
 	for (auto i : pindex) {
 		level3_positions[i.first] = level3_i_f.tellp();
 		//cout << i.first << endl;
-		for(uint32_t n : i.second) {
+		for(uint32_t n : i.second)
 			level3_i_f << n << endl;
-		}
 		level3_i_f << endl;
 		
 	}
-
+	
 	for (auto i : level3_positions) {
+		if(!level2_positions.count(latman(i.first))){
+			cout<< "level3    :" << latman(i.first) << " " << i.first << endl; 
+			level2_positions[latman(i.first)]=level2_i_f.tellp();
+		}
+		
 		level2_i_f << i.first << endl << i.second << endl;
+	}
+
+	for (auto i : level2_positions){
+ 		level1_i_f.seekp(i.first*4);
+		level1_i_f.write((char*)&i.second, 4);
+		cout << i.first*4 << " " << i.second <<endl;
 	}
 
 	cout << "Size: " << pindex.size() << "\n";

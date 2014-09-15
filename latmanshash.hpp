@@ -1,7 +1,9 @@
 #ifndef LATMAN_H
 #define LATMAN_H
-
-int latman(char* identifier){
+#include <string>
+using namespace std;
+int latman(string i){
+	const char* identifier = i.c_str();
 	int hash=0;
 	int mult = 1;
 	for(int i = 0; i <3; i++){
