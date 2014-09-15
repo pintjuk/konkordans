@@ -34,17 +34,34 @@ int main(int argc, char ** argv) {
 	openfstream(level1_i_f, fstream::out, "level1");
 	//fseek(file, 10000, SEEK_SET);
 	while(cin){
-		char word[45];
+		string word;
 		uint32_t pointer;
-		cin.getline(word, 45, ' ');
+		/*cin.getline(word, 45, ' ');
 		cin >> pointer;
-		cin.get();
+		cin.get();*/
+		cin >> word;
+		cin >> pointer;
 		pindex[word].push_back(pointer);
+		//cout << "Pindex size: " << pindex.size() << " Word:" << word << endl;
 	}
 
+	/*while(cin){
+		string hora;
+		int neger;
+		cin >> hora;
+		cin >> neger;
+		cout << "Lol:" << hora << " at " << neger << endl;
+	}*/
+
+
+	level3_positions.max_size();
+	
+
 	for (auto i : pindex) {
+		//if (i.first != "kollar") continue;
 		level3_positions[i.first] = level3_i_f.tellp();
-		//cout << i.first << endl;
+		//cout << "Size: " << level3_positions.size() << endl;
+		//cout << "Level 3:" << i.first << endl;
 		for(uint32_t n : i.second)
 			level3_i_f << n << endl;
 		level3_i_f << (unsigned int)-1 << endl;
@@ -53,7 +70,8 @@ int main(int argc, char ** argv) {
 	
 	for (auto i : level3_positions) {
 		if(!level2_positions.count(latman(i.first))){
-			cout<< "level3    :" << latman(i.first) << " " << i.first << endl; 
+			//if (i.first == "kollar")
+			//cout << "level3 hash:" << latman(i.first) << " word:" << i.first << endl; 
 			level2_positions[latman(i.first)]=level2_i_f.tellp();
 		}
 		
@@ -63,7 +81,7 @@ int main(int argc, char ** argv) {
 	for (auto i : level2_positions){
  		level1_i_f.seekp(i.first*4);
 		level1_i_f.write((char*)&i.second, 4);
-		cout << i.first*4 << " " << i.second <<endl;
+		//cout << i.first*4 << " " << i.second << endl;
 	}
 
 	cout << "Size: " << pindex.size() << "\n";

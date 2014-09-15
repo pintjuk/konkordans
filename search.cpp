@@ -73,7 +73,7 @@ int main(int argc, char ** argv) {
 			cerr << "No more matches" << endl;
 			break;
 		}
-		cerr << "Location in Korpus: " << pos << endl;
+		//cerr << "Location in Korpus: " << pos << endl;
 		int posless = (((int)pos-30) < 0)?0:pos-30;
 		korpus.seekg(posless);
 		cout << "...";
