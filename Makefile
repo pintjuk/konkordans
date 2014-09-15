@@ -9,4 +9,6 @@ search: search.o
 search.o: search.cpp latmanshash.hpp
 	g++ $(flags) -c search.cpp
 clean:
-	rm *.o indexer level1 level2 level3 search
+	rm *.o indexer  search
+clean_crap:
+	rm level1 level2 level3
