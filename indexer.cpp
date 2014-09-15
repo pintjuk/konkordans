@@ -1,25 +1,30 @@
 #include <iostream>
 #include "latmanshash.hpp"
-#include <stdio.h>
 #include <unordered_map>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 typedef unordered_map<string,vector<uint32_t>> pindex; 
 
-FILE * openIndex(string name) {
-	FILE * file;
-	file = fopen(name.c_str(), "w");
-	if (file == NULL) {
-		cerr << "Unable to open index for writing\n";
-		exit (1);
+void openfstream(fstream& filestream, ios_base::openmode flags){
+	filestream.open("index", flags);
+	if(!filestream.is_open()){
+		cerr << "faild to open file" << endl;
+		exit(1);
 	}
-	return file;
 }
 
 int main(void) {
 	pindex pindex;
-	FILE * file = openIndex("index");
+	fstream level3_i_f;
+	fstream level2_i_f;
+	fstream level1_i_f;
+
+	unordered_map<string, uint32_t> level3_positions; 
+	openfstream(level3_i_f, fstream::out| fstream::app);
+	openfstream(level2_i_f, fstream::out| fstream::app);
+	openfstream(level1_i_f, fstream::out| fstream::app);
 	//fseek(file, 10000, SEEK_SET);
 	
 	while(cin){
@@ -32,14 +37,17 @@ int main(void) {
 	}
 
 	for (auto i : pindex) {
-		cout << "Word: " << i.first << endl;
+		level3_positions[i.first] = level3_i_f.tellp();
 		for(uint32_t n : i.second) {
-			cout << "   " << n << endl;
+			//level3_i_f.write((char*)&n, sizeof(n));
+			level3_i_f << n << endl;
 		}
 		
 	}
 
 	cout << "Size: " << pindex.size() << "\n";
-
+	level3_i_f.close();
+	level2_i_f.close();
+	level1_i_f.close();
 	return 0;
 }
