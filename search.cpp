@@ -15,12 +15,19 @@ void openfstream(fstream& filestream, ios_base::openmode flags, string name){
 		exit(1);
 	}
 }
-bool match_lowcase(char a_low, char b){
+char tolowcase(char b){
 	if(((int)b) >= 65 && ((int)b) <= 90) b+=32;
 	if(b == (char)0xC4) b=(char)0xE3;
 	if(b == (char)0xD6) b=(char)0xF6;
 	if(b == (char)0xC5) b=(char)0xE5;
-	return a_low==b;
+	return b;
+}
+string tolowcase (string a){
+	for (char& c: a)c=tolowcase(c);
+	return a;
+}
+bool match_lowcase(char a, char b){
+	return tolowcase(a)==tolowcase(b);
 }
 
 bool istermenateword(char b){
@@ -47,10 +54,10 @@ int main(int argc, char ** argv) {
 		cerr << "Ange en sökterm." << endl;
 		exit(1);
 	}
+	string searchterm= tolowcase(string(argv[1]));
+	cerr << "Sökt ord: " << searchterm << endl;
 
-	cerr << "Sökt ord: " << argv[1] << endl;
-
-	int hash = latman(string(argv[1]));
+	int hash = latman(string(searchterm));
 	cerr << "Hash: " << hash << endl;
 
 	level1_i_f.seekg(hash*4);
@@ -75,7 +82,7 @@ int main(int argc, char ** argv) {
 			exit(0);
 		}
 
-		if (word == string(argv[1])) {
+		if (word == searchterm) {
 			cerr << "Level 2 -> Level 3 pointer: " << position << endl;
 			break;
 		}
@@ -95,16 +102,16 @@ int main(int argc, char ** argv) {
 		korpus.seekg(posless);	
 		cout << "...";
 		string matching_chars="";
-		for(int i =0;i<60+word.length();i++){
+		for(int i =0;i<60+ searchterm.length();i++){
 			if(!korpus)exit(0);
 			char lel;
 			korpus.get(lel);
 			if(lel=='\n')
 				lel=' ';
 			if(highlite){
-				if(match_lowcase(word[matching_chars.size()], lel)){
+				if(match_lowcase(searchterm[matching_chars.size()], lel)){
 					matching_chars+=lel;
-					if(matching_chars.size()==word.size()&& istermenateword(korpus.peek())){
+					if(matching_chars.size()==searchterm.size()&& istermenateword(korpus.peek())){
 						cout << "\x1b[1m" << matching_chars << "\x1b[0m";
 						matching_chars ="";
 					}
