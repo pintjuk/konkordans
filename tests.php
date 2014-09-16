@@ -40,15 +40,19 @@ arsort($known);
 
 echo "Trying all words...\n";
 
+
+
 $i = 0;
 foreach($known as $word => $no) {
 	++$i;
-	echo "Testing ".$i." of ".count($known)."...";
+	if (rand(1, 100) != 1) continue; //Only test 1 in 100 words
+	echo "Testing ".$i." of ".count($known)."... (".$word.")                                    ";
 
-	$testdata = trim(shell_exec("echo -n 'y' | ./search ".$word));
-	if (!count(explode("\n", $testdata))) {
+	$testdata = trim(shell_exec("./search ".$word));
+	if (count(explode("\n", $testdata)) != $no) {
 		echo "\n";
-		echo "TEST CASE FAILED FOR WORD: ".$$word."\nWill not continue.\n";
+		echo "TEST CASE FAILED FOR WORD: ".$word."\nWill not continue.\n";
+		die();
 	}
 
 	echo "\r";
