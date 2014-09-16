@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 
+
 using namespace std;
 
 void openfstream(fstream& filestream, ios_base::openmode flags, string name){
@@ -13,6 +14,17 @@ void openfstream(fstream& filestream, ios_base::openmode flags, string name){
 		cerr << "failed to open file" << endl;
 		exit(1);
 	}
+}
+bool match_lowcase(char a_low, char b){
+	if(((int)b) >= 65 && ((int)b) <= 90) b+=32;
+	if(b == (char)0xC4) b=(char)0xE3;
+	if(b == (char)0xD6) b=(char)0xF6;
+	if(b == (char)0xC5) b=(char)0xE5;
+	return a_low==b;
+}
+
+bool istermenateword(char b){
+	return b<65||(b>90&&b<97)||b>122&&b!=196&&b!=107&&b!=214&&b!=228&&b!=229&&b!=246;
 }
 
 int main(int argc, char ** argv) {
@@ -25,8 +37,13 @@ int main(int argc, char ** argv) {
 	openfstream(level2_i_f, fstream::in, "level2");
 	openfstream(level1_i_f, fstream::in, "level1");
 	openfstream(korpus, fstream::in, "korpus");
-
-	if (argc != 2) {
+	bool highlite=false;
+	if(argc == 3){
+		if(string(argv[2])=="-c"){
+			highlite = true;
+		}
+	}
+	if (argc < 2 ) {
 		cerr << "Ange en sökterm." << endl;
 		exit(1);
 	}
@@ -75,17 +92,31 @@ int main(int argc, char ** argv) {
 		}
 		//cerr << "Location in Korpus: " << pos << endl;
 		int posless = (((int)pos-30) < 0)?0:pos-30;
-		korpus.seekg(posless);
+		korpus.seekg(posless);	
 		cout << "...";
+		string matching_chars="";
 		for(int i =0;i<60+word.length();i++){
 			if(!korpus)exit(0);
 			char lel;
 			korpus.get(lel);
 			if(lel=='\n')
 				lel=' ';
-			cout << lel;
+			if(highlite){
+				if(match_lowcase(word[matching_chars.size()], lel)){
+					matching_chars+=lel;
+					if(matching_chars.size()==word.size()&& istermenateword(korpus.peek())){
+						cout << "\x1b[1m" << matching_chars << "\x1b[0m";
+						matching_chars ="";
+					}
+				}else{
+					cout << matching_chars << lel;
+					matching_chars ="";
+			}
+			}else{
+				cout << lel;
+			}
 		}
-		cout <<"..."<< endl;
+		cout<<"..." <<endl;
 
 	}
 

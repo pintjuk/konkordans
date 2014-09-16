@@ -1,4 +1,4 @@
-flags = -std=c++11 -O2 -g -Wall
+flags = -std=c++11 -O2 -g
 
 indexer: indexer.o
 	g++ $(flags) indexer.o -o indexer 
