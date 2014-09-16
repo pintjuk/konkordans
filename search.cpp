@@ -102,7 +102,7 @@ int main(int argc, char ** argv) {
 		matchpointers.push_back(pos);
 
 	}
-	cout << "Hitade " << matchpointers.size() << " matchningar"<<endl;
+	cout << "Hittade " << matchpointers.size() << " matchningar"<<endl;
 	if(matchpointers.size()> 25){
 		cout << "Vill du skriva ut resultat? (y/n)\n:";
 		string svar;
