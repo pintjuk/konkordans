@@ -4,8 +4,8 @@ indexer: indexer.o
 	g++ $(flags) indexer.o -o indexer 
 indexer.o: indexer.cpp latmanshash.hpp
 	g++ $(flags) -c indexer.cpp
-Konkordans: search.o
-	g++ $(flags) search.o -o Konkordans
+search: search.o
+	g++ $(flags) search.o -o search
 search.o: search.cpp latmanshash.hpp
 	g++ $(flags) -c search.cpp
 clean:
