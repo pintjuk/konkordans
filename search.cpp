@@ -90,14 +90,30 @@ int main(int argc, char ** argv) {
 	}
 
 	level3_i_f.seekg(position);
- 	for (;;) {
-		uint32_t pos;
+	vector<int> matchpointers;
+ 	while (level3_i_f) {
+		unsigned int pos;
 		level3_i_f >> pos;
+		
 		if (pos == (unsigned int)-1) {
-			cerr << "No more matches" << endl;
+			
 			break;
 		}
-		//cerr << "Location in Korpus: " << pos << endl;
+		matchpointers.push_back(pos);
+
+	}
+	cout << "Hitade " << matchpointers.size() << " matchningar"<<endl;
+	if(matchpointers.size()> 25){
+		cout << "Vill du skriva ut resultat? (y/n)\n:";
+		string svar;
+		cin >> svar;
+		if(svar!="y"){
+			exit(0);
+		}
+	}
+
+	for(int pos: matchpointers){
+		
 		int posless = (((int)pos-30) < 0)?0:pos-30;
 		korpus.seekg(posless);	
 		cout << "...";
@@ -124,7 +140,6 @@ int main(int argc, char ** argv) {
 			}
 		}
 		cout<<"..." <<endl;
-
 	}
 
 
