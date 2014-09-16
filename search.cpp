@@ -51,17 +51,22 @@ int main(int argc, char ** argv) {
 		}
 	}
 	if (argc < 2 ) {
+		cerr << "Ange en sökterm." << endl;
 		exit(1);
 	}
 	string searchterm= tolowcase(string(argv[1]));
+	cerr << "Sökt ord: " << searchterm << endl;
 
 	int hash = latman(string(searchterm));
+	cerr << "Hash: " << hash << endl;
 
 	level1_i_f.seekg(hash*4);
 	char level1_selected_c[4];
 
 	level1_i_f.read(level1_selected_c, 4);
 	uint32_t level1_selected_i = *(int *) level1_selected_c;
+
+	cerr << "Level 1 -> Level 2 pointer: " << level1_selected_i << endl;
 
 	level2_i_f.seekg(level1_selected_i);
 
@@ -71,44 +76,28 @@ int main(int argc, char ** argv) {
 		
 		level2_i_f >> word;
 		level2_i_f >> position;
-		
+		cerr << "Trying match: " << word << endl;
 		if (latman(word) != hash) {
-			
+			cerr << "Ingen matchning hittad (" << hash << "," << latman(word) << ")" << endl;
 			exit(0);
 		}
 
 		if (word == searchterm) {
-			
+			cerr << "Level 2 -> Level 3 pointer: " << position << endl;
 			break;
 		}
 
 	}
 
 	level3_i_f.seekg(position);
-	vector<int> matchpointers;
- 	while (level3_i_f) {
-		unsigned int pos;
+ 	for (;;) {
+		uint32_t pos;
 		level3_i_f >> pos;
-		
 		if (pos == (unsigned int)-1) {
-			
+			cerr << "No more matches" << endl;
 			break;
 		}
-		matchpointers.push_back(pos);
-
-	}
-	cout << "Hitade " << matchpointers.size() << " matchningar"<<endl;
-	if(matchpointers.size()> 25){
-		cout << "Vill du skriva ut resultat? (y/n)\n:";
-		string svar;
-		cin >> svar;
-		if(svar!="y"){
-			exit(0);
-		}
-	}
-
-	for(int pos: matchpointers){
-		
+		//cerr << "Location in Korpus: " << pos << endl;
 		int posless = (((int)pos-30) < 0)?0:pos-30;
 		korpus.seekg(posless);	
 		cout << "...";
@@ -135,6 +124,7 @@ int main(int argc, char ** argv) {
 			}
 		}
 		cout<<"..." <<endl;
+
 	}
 
 
